@@ -4,28 +4,35 @@
 
 #include<stdio.h>
 #include<wiringPi.h>
+#include<wiringPiI2C.h>
 
-
+// =====================================================================
+// Macros
+#define CS 7
 #define I2CPIN0 8
 
+// =====================================================================
+// Main 
 int main(void)
 {
 	wiringPiSetup();
-	//wiringPiSetupGpio();
+	//wiringPiI2CSetup();
 
-	pinMode(I2CPIN0, OUTPUT);
+	pinMode(CS, OUTPUT);
 	
-	printf("LED is blinking!\n");
+	digitalWrite(CS, HIGH); // Enable chip
+	printf("Chip Enabled!\n");
 
 	int i;
-	for(i = 0; i < 1000; i++)
-	{
-		digitalWrite(I2CPIN0, HIGH);
-		delay(500);
-		digitalWrite(I2CPIN0, LOW);
-		delay(500);
-	}
 	
+	// The loop --------------------------------------------------------
+	for(i = 0; i < 10000; i++)
+	{
+		delay(50);
+	}
+	// -----------------------------------------------------------------
+	
+	digitalWrite(CS, LOW); // Disable chip
 	return 0;
 }
 
