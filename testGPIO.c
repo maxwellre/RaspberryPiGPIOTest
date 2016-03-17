@@ -21,8 +21,9 @@ int main(void)
 	for(i = 0; i < 1000; i++)
 	{
 		digitalWrite(I2CPIN0, HIGH);
-		delay(2000);
+		delay(500);
 		digitalWrite(I2CPIN0, LOW);
+		delay(500);
 	}
 	
 	return 0;
