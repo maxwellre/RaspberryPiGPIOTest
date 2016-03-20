@@ -9,30 +9,54 @@
 // =====================================================================
 // Macros
 #define CS 7
-#define I2CPIN0 8
+#define I2CSDA 8
+#define I2CSCL 9 
+
+// =====================================================================
+// Function declaration 	
+void checkRet(int ret, int isDispRet);
 
 // =====================================================================
 // Main 
 int main(void)
 {
-	wiringPiSetup();
-	//wiringPiI2CSetup();
-
-	pinMode(CS, OUTPUT);
-	
-	digitalWrite(CS, HIGH); // Enable chip
-	printf("Chip Enabled!\n");
-
 	int i;
+	int fd, ret;
+
+	fd = wiringPiI2CSetup(0x1e);
+	printf("I2C Initialized: ID = %d\n", fd);
+	
+	pinMode(I2CSDA, OUTPUT);
+	pinMode(I2CSCL, OUTPUT);
+	
+	ret = wiringPiI2CWriteReg8(fd, 0x20, 0x97);
+	checkRet(ret, 0);
+
+	
+	
+	printf("\n");
 	
 	// The loop --------------------------------------------------------
-	for(i = 0; i < 10000; i++)
-	{
-		delay(50);
+	for(i = 0; i < 10; i++)
+	{		
+		ret = wiringPiI2CReadReg8(fd, 0x20);
+		checkRet(ret, 1);	
 	}
 	// -----------------------------------------------------------------
 	
-	digitalWrite(CS, LOW); // Disable chip
 	return 0;
+}
+
+// Function declaration 	
+void checkRet(int ret, int isDispRet)
+{
+	if(ret == -1)
+	{
+		printf("Error!\n");
+	}
+	else if(isDispRet)
+	{
+		printf(" %02x ", ret);
+	}
 }
 
