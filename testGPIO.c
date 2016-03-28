@@ -22,6 +22,10 @@ int main(void)
 {
 	int fd, ret;
 	int outX, outY, outZ;
+	
+	FILE *fp;
+	
+	fp = fopen("RPI_acc_data.txt","wt");
 
 	fd = wiringPiI2CSetup(0x1e);
 	printf("I2C Initialized: ID = %d\n", fd);
@@ -39,6 +43,8 @@ int main(void)
 	
 	printf("\n");
 	
+	printf("Running...\n");
+	
 	// The loop --------------------------------------------------------
 	while(1)
 	{	
@@ -49,7 +55,8 @@ int main(void)
 			outY = wiringPiI2CReadReg16(fd, 0x2A);
 			outZ = wiringPiI2CReadReg16(fd, 0x2C);
 			
-			printf(" %d  %d  %d\n", outX, outY, outZ);
+			//printf(" %d  %d  %d\n", outX, outY, outZ);
+			fprintf(fp, "%d,%d,%d\r\n", outX, outY, outZ);
 		}
 		else
 		{
@@ -57,6 +64,8 @@ int main(void)
 		}	
 	}
 	// -----------------------------------------------------------------
+	
+	fclose(fp);
 	
 	return 0;
 }
